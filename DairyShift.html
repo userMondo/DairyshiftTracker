@@ -730,9 +730,6 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
     </style>
-    <!-- jsPDF and AutoTable for PDF Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body>
@@ -1281,19 +1278,17 @@
             const range = document.querySelector('input[name="export-range"]:checked').value;
             let exportData = [];
             let title = "Shifts Report";
-            let filename = "shifts_report.pdf";
 
             showLoading(true);
             try {
                 if (range === 'current') {
                     exportData = currentMonthDataForExport;
                     title = `Shifts Report - ${currentMonthLabelForExport}`;
-                    filename = `shifts_${currentMonthLabelForExport.replace(/\s+/g, '_')}.pdf`;
                 } else {
                     let allData = [];
                     let offset = 0;
                     let emptyCount = 0;
-                    
+
                     while (emptyCount < 2 && offset > -24) {
                         const res = await callApi('getHistory', 'GET', null, { offset: offset });
                         let mData = Array.isArray(res) ? res : (res && res.data ? res.data : []);
@@ -1307,7 +1302,6 @@
                     }
                     exportData = allData;
                     title = "All Shifts History";
-                    filename = "all_shifts_history.pdf";
                 }
 
                 if (!exportData || exportData.length === 0) {
@@ -1315,49 +1309,61 @@
                     return;
                 }
 
-                const tableData = exportData.map(item => {
-                    const dateStr = item.start.split(' ')[0];
-                    const startTimeStr = item.start.split(' ')[1] || '';
-                    const endTimeStr = item.end ? item.end.split(' ')[1] : 'Active';
-                    return [
-                        dateStr,
-                        startTimeStr.slice(0, 5),
-                        item.end ? endTimeStr.slice(0, 5) : 'Active',
-                        item.hours ? `${item.hours}` : '0',
-                        item.note || ''
-                    ];
-                });
-
                 const totalHours = exportData.reduce((sum, item) => sum + (parseFloat(item.hours) || 0), 0).toFixed(2);
-                tableData.push([
-                    { content: 'Total Hours', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
-                    { content: totalHours, styles: { fontStyle: 'bold' } },
-                    ''
-                ]);
 
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                doc.setFontSize(18);
-                doc.text(title, 14, 22);
-                
-                doc.setFontSize(11);
-                doc.setTextColor(100);
-                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+                const rows = exportData.map(item => {
+                    const dateStr = item.start.split(' ')[0];
+                    const startTimeStr = (item.start.split(' ')[1] || '').slice(0, 5);
+                    const endTimeStr = item.end ? (item.end.split(' ')[1] || '').slice(0, 5) : 'Active';
+                    const hours = item.hours || '0';
+                    const note = item.note || '';
+                    return `<tr>
+                        <td>${dateStr}</td>
+                        <td>${startTimeStr}</td>
+                        <td>${endTimeStr}</td>
+                        <td style="text-align:right">${hours}</td>
+                        <td>${note}</td>
+                    </tr>`;
+                }).join('');
 
-                doc.autoTable({
-                    startY: 35,
-                    head: [['Date', 'Start Time', 'End Time', 'Hours', 'Note']],
-                    body: tableData,
-                    theme: 'grid',
-                    headStyles: { fillColor: [59, 130, 246] },
-                    styles: { fontSize: 10, cellPadding: 3 },
-                    columnStyles: { 3: { halign: 'right' } }
-                });
+                const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${title}</title>
+<style>
+  body { font-family: sans-serif; padding: 16px; color: #111; margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #3b82f6; color: #fff; padding: 8px 10px; text-align: left; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .total td { font-weight: bold; border-top: 2px solid #cbd5e1; }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+<table>
+  <thead><tr><th>Date</th><th>Start Time</th><th>End Time</th><th>Hours</th><th>Note</th></tr></thead>
+  <tbody>
+    ${rows}
+    <tr class="total">
+      <td colspan="3" style="text-align:right">Total Hours</td>
+      <td style="text-align:right">${totalHours}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>`;
 
-                doc.save(filename);
+                const win = window.open('', '_blank');
+                win.document.write(html);
+                win.document.close();
+                win.focus();
+                win.print();
+
                 closeExportModal();
-                showToast("PDF Exported successfully");
+                showToast("Report ready to print / save as PDF");
             } catch (err) {
                 console.error("Export failed:", err);
                 showError(err);
