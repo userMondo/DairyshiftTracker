@@ -11,16 +11,38 @@ function formatTime(date) {
 function getSheetNameOffset(date, offsetMonths) {
     const timezone = "GMT+07:00";
     let baseDate = date || new Date();
-    const currentYear = parseInt(Utilities.formatDate(baseDate, timezone, "yyyy"), 10);
-    const currentMonth = parseInt(Utilities.formatDate(baseDate, timezone, "MM"), 10) - 1;
+    const day = parseInt(Utilities.formatDate(baseDate, timezone, "dd"), 10);
+    let cycleMonth = parseInt(Utilities.formatDate(baseDate, timezone, "MM"), 10) - 1; // 0-indexed
+    let cycleYear = parseInt(Utilities.formatDate(baseDate, timezone, "yyyy"), 10);
 
-    let targetMonth = currentMonth + offsetMonths;
-    let targetYear = currentYear;
-    while (targetMonth < 0) { targetMonth += 12; targetYear -= 1; }
-    while (targetMonth > 11) { targetMonth -= 12; targetYear += 1; }
+    // Salary cycle: if day < CYCLE_START_DAY, we're still in previous month's cycle
+    if (day < CYCLE_START_DAY) {
+        cycleMonth -= 1;
+    }
 
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    return `${monthNames[targetMonth]} ${targetYear}`;
+    // Apply offset
+    cycleMonth += offsetMonths;
+
+    // Normalize month/year
+    while (cycleMonth < 0) { cycleMonth += 12; cycleYear -= 1; }
+    while (cycleMonth > 11) { cycleMonth -= 12; cycleYear += 1; }
+
+    return `${cycleMonth + 1}/${String(cycleYear).slice(-2)}`;
+}
+
+// Returns the cycle sheet name for a given YYYY-MM-DD date string
+function getSheetNameForDate(dateStr) {
+    const parts = dateStr.split('-');
+    const day = parseInt(parts[2], 10);
+    let month = parseInt(parts[1], 10); // 1-indexed
+    let year = parseInt(parts[0], 10);
+
+    if (day < CYCLE_START_DAY) {
+        month -= 1;
+        if (month < 1) { month = 12; year -= 1; }
+    }
+
+    return `${month}/${String(year).slice(-2)}`;
 }
 
 function getOrCreateSheet(sheetName) {
@@ -76,6 +98,8 @@ function handleApiRequest(action, e) {
         } else if (action === 'addManual') {
             const data = JSON.parse(e.postData.contents);
             result = addManualShift(data);
+        } else if (action === 'archive') {
+            result = archivePreviousMonth();
         } else {
             result = { error: "Invalid action" };
         }
@@ -213,26 +237,13 @@ function toggleShift(action, clientTimestamp) {
         // Update End Time (Col 4)
         sheet.getRange(activeRowIndex, 4).setValue(timeStr);
 
-        // Calculate Duration
-        // Get Date (Col 2) and Start Time (Col 3)
-        const rowValues = sheet.getRange(activeRowIndex, 2, 1, 2).getDisplayValues()[0];
-        const dateRaw = rowValues[0];
-        const startTimeRaw = rowValues[1];
+        // Set Total Hours formula (Col 5)
+        const formula = `=TEXT(MOD(D${activeRowIndex}-C${activeRowIndex},1)*24,"0.00")`;
+        sheet.getRange(activeRowIndex, 5).setFormula(formula);
 
-        // Construct dates
-        const start = new Date(dateRaw.replace(/-/g, '/') + " " + startTimeRaw);
-        let end = new Date(dateRaw.replace(/-/g, '/') + " " + timeStr);
-
-        // Handle Overnight (End < Start)
-        if (end < start) {
-            end.setDate(end.getDate() + 1);
-        }
-
-        const durationMs = end.getTime() - start.getTime();
-        const hours = (durationMs / (1000 * 60 * 60)).toFixed(2);
-
-        // Update Total Hours (Col 5)
-        sheet.getRange(activeRowIndex, 5).setValue(hours);
+        // Read back calculated value for API response
+        SpreadsheetApp.flush();
+        const hours = sheet.getRange(activeRowIndex, 5).getDisplayValue();
 
         return { success: true, state: 'inactive', totalHours: hours };
     }
@@ -303,19 +314,10 @@ function updateSheetRow(sheetName, id, date, startTime, endTime, note) {
         }
         sheet.getRange(row, 6).setValue(note || "");
 
-        // Recalculate Duration if strict end exists
+        // Recalculate Duration if end time exists
         if (endTime) {
-            const start = new Date(date.replace(/-/g, '/') + " " + startTime);
-            let end = new Date(date.replace(/-/g, '/') + " " + endTime);
-
-            // Handle Overnight (End < Start)
-            if (end < start) {
-                end.setDate(end.getDate() + 1);
-            }
-
-            const durationMs = end.getTime() - start.getTime();
-            const hours = (durationMs / (1000 * 60 * 60)).toFixed(2);
-            sheet.getRange(row, 5).setValue(hours);
+            const formula = `=TEXT(MOD(D${row}-C${row},1)*24,"0.00")`;
+            sheet.getRange(row, 5).setFormula(formula);
         } else {
             sheet.getRange(row, 5).setValue("");
         }
@@ -409,8 +411,16 @@ function getShiftHistory(offset = 0) {
         }
     }
 
+    // Build cycle range label from sheet name (e.g. "3/26" -> "3/8 - 4/7")
+    const sheetParts = sheetName.split('/');
+    const cycleM = parseInt(sheetParts[0], 10);
+    let endM = cycleM + 1;
+    if (endM > 12) endM = 1;
+    const endDay = CYCLE_START_DAY - 1;
+    const cycleLabel = `${cycleM}/${CYCLE_START_DAY} - ${endM}/${endDay}`;
+
     return {
-        monthLabel: sheetName,
+        monthLabel: cycleLabel,
         data: history
     };
 }
@@ -423,34 +433,22 @@ function addManualShift(data) {
     const { date, startTime, endTime, note } = data; // date is YYYY-MM-DD
     if (!date || !startTime || !endTime) throw new Error("Missing required fields");
 
-    // Parse date to ensure no timezone issues
-    const yearStr = date.split('-')[0];
-    const monthIndex = parseInt(date.split('-')[1], 10) - 1;
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const sheetName = `${monthNames[monthIndex]} ${yearStr}`;
+    const sheetName = getSheetNameForDate(date);
     const sheet = getOrCreateSheet(sheetName);
-
-    // Calculate Duration
-    // Using arbitrary base date for time calculation
-    const baseDateStr = "2000/01/01";
-    const start = new Date(baseDateStr + " " + startTime);
-    let end = new Date(baseDateStr + " " + endTime);
-
-    // Handle Overnight (End < Start)
-    if (end < start) {
-        end.setDate(end.getDate() + 1);
-    }
-
-    const durationMs = end.getTime() - start.getTime();
-    const hours = (durationMs / (1000 * 60 * 60)).toFixed(2);
 
     // Generate ID
     const timezone = "GMT+07:00";
     const now = new Date();
     const id = Utilities.formatDate(now, timezone, "yyyyMMddHHmmss") + Math.floor(Math.random() * 1000);
 
-    // Append: [ID, Date, Start Time, End Time, Total Hours, Note]
-    sheet.appendRow([id, date, startTime, endTime, hours, note || ""]);
+    // Append row first to get the row number, then set formula
+    sheet.appendRow([id, date, startTime, endTime, "", note || ""]);
+    const lastRow = sheet.getLastRow();
+    const formula = `=TEXT(MOD(D${lastRow}-C${lastRow},1)*24,"0.00")`;
+    sheet.getRange(lastRow, 5).setFormula(formula);
+
+    SpreadsheetApp.flush();
+    const hours = sheet.getRange(lastRow, 5).getDisplayValue();
 
     return { success: true, totalHours: hours };
 }

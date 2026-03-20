@@ -1313,12 +1313,14 @@
 
                 const rows = exportData.map(item => {
                     const dateStr = item.start.split(' ')[0];
+                    const dp = dateStr.split('-');
+                    const shortDate = parseInt(dp[1]) + '/' + parseInt(dp[2]);
                     const startTimeStr = (item.start.split(' ')[1] || '').slice(0, 5);
                     const endTimeStr = item.end ? (item.end.split(' ')[1] || '').slice(0, 5) : 'Active';
                     const hours = item.hours || '0';
                     const note = item.note || '';
                     return `<tr>
-                        <td>${dateStr}</td>
+                        <td>${shortDate}</td>
                         <td>${startTimeStr}</td>
                         <td>${endTimeStr}</td>
                         <td style="text-align:right">${hours}</td>
@@ -1404,6 +1406,8 @@
 
             historyData.forEach(item => {
                 const dateStr = item.start.split(' ')[0];
+                const dateParts = dateStr.split('-');
+                const shortDate = parseInt(dateParts[1]) + '/' + parseInt(dateParts[2]);
                 const startTimeStr = item.start.split(' ')[1] || '';
                 const endTimeStr = item.end ? item.end.split(' ')[1] : 'Active';
 
@@ -1415,7 +1419,7 @@
                 div.innerHTML = `
                   <div class="history-info" style="flex: 1; min-width: 0; padding-right: 12px;">
                     <div class="history-time">${startTimeStr.slice(0, 5)} - ${item.end ? endTimeStr.slice(0, 5) : 'Active'}</div>
-                    <div class="history-date">${dateStr}</div>
+                    <div class="history-date">${shortDate}</div>
                     ${item.hours ? `<div class="history-duration">${item.hours} hrs</div>` : `<div class="history-duration" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">On-going</div>`}
                     ${displayNote ? `<div class="history-note" style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary); background: var(--primary-bg); border: 1px solid var(--border-subtle); padding: 8px; border-radius: 8px; white-space: pre-wrap; word-break: break-word;">${displayNote}</div>` : ''}
                   </div>
