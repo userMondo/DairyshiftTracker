@@ -78,8 +78,16 @@ function handleApiRequest(action, e) {
     let result = {};
 
     try {
+        // Refresh config from sheet on each request
+        initConfig();
+
         if (action === 'getStatus') {
             result = getShiftStatus();
+        } else if (action === 'getConfig') {
+            result = getAppConfig();
+        } else if (action === 'updateConfig') {
+            const data = JSON.parse(e.postData.contents);
+            result = updateAppConfig(data);
         } else if (action === 'getHistory') {
             const offset = (e.parameter && e.parameter.offset) ? parseInt(e.parameter.offset, 10) : 0;
             result = getShiftHistory(offset);
@@ -371,16 +379,35 @@ function getShiftHistory(offset = 0) {
             // Columns: 1:ID, 2:Date, 3:StartTime, 4:EndTime, 5:TotalHours, 6:Note
             let data = [];
             if (sheet.getMaxColumns() >= 6) {
-                data = sheet.getRange(startRow, 1, numRows, 6).getDisplayValues().reverse();
+                data = sheet.getRange(startRow, 1, numRows, 6).getValues().reverse();
             } else {
-                const temp = sheet.getRange(startRow, 1, numRows, 5).getDisplayValues().reverse();
+                const temp = sheet.getRange(startRow, 1, numRows, 5).getValues().reverse();
                 data = temp.map(r => [...r, ""]);
             }
 
             history = data.map(row => {
-                const date = row[1];
-                const startTime = row[2];
-                const endTime = row[3];
+                // Format date: handle both Date objects and strings
+                let date = row[1];
+                if (date instanceof Date) {
+                    date = Utilities.formatDate(date, "GMT+07:00", "yyyy-MM-dd");
+                } else {
+                    date = String(date);
+                }
+
+                // Format times: handle both Date objects and strings
+                let startTime = row[2];
+                if (startTime instanceof Date) {
+                    startTime = Utilities.formatDate(startTime, "GMT+07:00", "HH:mm:ss");
+                } else {
+                    startTime = String(startTime);
+                }
+
+                let endTime = row[3];
+                if (endTime instanceof Date) {
+                    endTime = Utilities.formatDate(endTime, "GMT+07:00", "HH:mm:ss");
+                } else {
+                    endTime = String(endTime);
+                }
 
                 // Reconstruct End Date for display if overnight
                 let endDateStr = date;
@@ -401,7 +428,7 @@ function getShiftHistory(offset = 0) {
                     id: row[0],
                     start: date + " " + startTime,
                     end: endTime ? (endDateStr + " " + endTime) : "",
-                    hours: row[4],
+                    hours: String(row[4]),
                     note: row[5] || ""
                 };
             });
@@ -451,4 +478,38 @@ function addManualShift(data) {
     const hours = sheet.getRange(lastRow, 5).getDisplayValue();
 
     return { success: true, totalHours: hours };
+}
+
+/**
+ * Returns app configuration.
+ */
+function getAppConfig() {
+    return {
+        cycleStartDay: getCycleStartDay()
+    };
+}
+
+/**
+ * Updates app configuration.
+ * @param {Object} data - { cycleStartDay: number }
+ */
+function updateAppConfig(data) {
+    const { cycleStartDay } = data;
+    const day = parseInt(cycleStartDay, 10);
+    if (isNaN(day) || day < 1 || day > 28) {
+        throw new Error("Cycle start day must be between 1 and 28");
+    }
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName('_Config');
+    if (!sheet) {
+        sheet = ss.insertSheet('_Config');
+        sheet.getRange('A1').setValue('CycleStartDay');
+    }
+    sheet.getRange('B1').setValue(day);
+
+    // Update the global variable
+    CYCLE_START_DAY = day;
+
+    return { success: true, cycleStartDay: day };
 }

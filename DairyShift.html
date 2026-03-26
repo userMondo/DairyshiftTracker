@@ -1,951 +1,501 @@
 <!DOCTYPE html>
-<html>
-
+<html class="dark" lang="en">
 <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>DairyShift</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-dim": "#b8b9b9",
+              "on-secondary-container": "#aac6b6",
+              "secondary-fixed-dim": "#bfdbcb",
+              "on-tertiary-fixed-variant": "#475f6a",
+              "secondary": "#89a495",
+              "on-primary-fixed-variant": "#5a5c5c",
+              "outline": "#767575",
+              "surface-variant": "#252626",
+              "on-tertiary-fixed": "#2b424d",
+              "tertiary": "#e0f4ff",
+              "on-background": "#e7e5e4",
+              "on-primary-container": "#d0d0d0",
+              "on-tertiary-container": "#3e5560",
+              "on-secondary-fixed": "#2c4438",
+              "error-dim": "#bb5551",
+              "on-secondary-fixed-variant": "#486154",
+              "on-error-container": "#ff9993",
+              "inverse-surface": "#fcf8f8",
+              "secondary-dim": "#89a495",
+              "surface": "#0e0e0e",
+              "surface-tint": "#c6c6c6",
+              "on-primary-fixed": "#3e4040",
+              "secondary-fixed": "#cde9d8",
+              "surface-dim": "#0e0e0e",
+              "tertiary-fixed": "#cde6f4",
+              "inverse-primary": "#5e5f5f",
+              "primary": "#c6c6c6",
+              "on-primary": "#3f4041",
+              "tertiary-dim": "#bfd8e5",
+              "secondary-container": "#284035",
+              "tertiary-container": "#cde6f4",
+              "on-tertiary": "#465d68",
+              "primary-container": "#454747",
+              "on-error": "#490106",
+              "surface-container": "#191a1a",
+              "primary-fixed": "#e2e2e2",
+              "error": "#ee7d77",
+              "outline-variant": "#484848",
+              "surface-container-low": "#131313",
+              "surface-container-highest": "#252626",
+              "on-secondary": "#0c241a",
+              "error-container": "#7f2927",
+              "surface-bright": "#2c2c2c",
+              "inverse-on-surface": "#565554",
+              "surface-container-high": "#1f2020",
+              "tertiary-fixed-dim": "#bfd8e5",
+              "primary-fixed-dim": "#d4d4d4",
+              "on-surface-variant": "#acabaa",
+              "surface-container-lowest": "#000000",
+              "on-surface": "#e7e5e4",
+              "background": "#0e0e0e"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.125rem",
+              "lg": "0.25rem",
+              "xl": "0.5rem",
+              "full": "0.75rem"
+            }
+          }
+        }
+      }
+    </script>
     <style>
-        :root {
-            --primary-bg: #f8fafc;
-            --secondary-bg: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
-            --accent-brand: #3b82f6;
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-            --nav-inactive: #94a3b8;
-            --border-subtle: #e2e8f0;
-            --card-radius: 24px;
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
         }
-
-        [data-theme="dark"] {
-            --primary-bg: #0b0f19;
-            --secondary-bg: #111827;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-brand: #60a5fa;
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-            --glass-bg: rgba(17, 24, 39, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --nav-inactive: #475569;
-            --border-subtle: #1e293b;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-primary);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            position: relative;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
+        ::-webkit-calendar-picker-indicator { filter: invert(1); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; }
+        ::-webkit-scrollbar-thumb { background: #484848; }
 
-        /* Abstract Background Blobs */
-        body::before,
-        body::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            opacity: 0;
-            transition: all 0.5s ease;
-            pointer-events: none;
-        }
-
-        body::before {
-            background: var(--accent-brand);
-            width: 300px;
-            height: 300px;
-            top: -150px;
-            right: -150px;
-        }
-
-        body::after {
-            background: #8b5cf6;
-            /* Purple accent */
-            width: 250px;
-            height: 250px;
-            bottom: -100px;
-            left: -120px;
-        }
-
-        [data-theme="dark"] body::before,
-        [data-theme="dark"] body::after {
-            opacity: 0.15;
-        }
-
-        /* Glassmorphism Header */
-        header {
-            padding: 1.25rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            z-index: 10;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            background: var(--accent-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        }
-
-        #theme-toggle {
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-subtle);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #theme-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Config Panel */
-        #config-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--glass-border);
-            text-align: center;
-        }
-
-        #webapp-url {
-            width: 100%;
-            max-width: 400px;
-            padding: 12px 16px;
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            background: var(--secondary-bg);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        #webapp-url:focus {
-            outline: none;
-            border-color: var(--accent-brand);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-
-        /* Main Content Area */
-        #main-content {
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-            padding-bottom: 90px;
-            scrollbar-width: none;
-            /* Firefox */
-        }
-
-        #main-content::-webkit-scrollbar {
-            display: none;
-            /* Chrome/Safari */
-        }
-
+        /* Tab content display logic */
         .tab-content {
             display: none;
-            padding: 30px 20px 120px;
-            min-height: 100%;
-            flex-direction: column;
-            align-items: center;
-            animation: tabFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(8px);
+            animation: tabFade 0.3s ease forwards;
         }
+        .tab-content.active { display: flex; }
+        @keyframes tabFade { to { opacity: 1; transform: translateY(0); } }
 
-        .tab-content.active {
-            display: flex;
-        }
-
-        @keyframes tabFade {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Timer Styles - TAB 1 */
-        #tab-timer {
-            justify-content: center;
-        }
-
-        #status-display {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        #timer {
-            font-size: 4.5rem;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -2px;
-            color: var(--text-primary);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        [data-theme="dark"] #timer {
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        #shift-status {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Action Orb (Premium Button) */
-        #action-btn {
-            width: 240px;
-            height: 240px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1;
-        }
-
-        #action-btn::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: inherit;
-            filter: blur(12px);
-            opacity: 0.6;
-            z-index: -1;
-            transition: all 0.4s ease;
-        }
-
-        #action-btn:active {
-            transform: scale(0.92);
-        }
-
-        #action-btn:active::before {
-            filter: blur(4px);
-            opacity: 0.8;
-            inset: -2px;
-        }
-
+        /* Button state gradients */
         .btn-start {
-            background: var(--accent-gradient);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #c6c6c6, #b8b9b9);
+            box-shadow: 0 0 64px rgba(198,198,198,0.15);
         }
-
         .btn-stop {
-            background: var(--danger-gradient);
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #ee7d77, #bb5551);
+            box-shadow: 0 0 64px rgba(238,125,119,0.25);
             animation: orbPulse 3s infinite alternate;
         }
-
         @keyframes orbPulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
-            }
-
-            100% {
-                transform: scale(1.05);
-                box-shadow: 0 15px 45px rgba(239, 68, 68, 0.6);
-            }
+            0% { transform: scale(1); box-shadow: 0 0 64px rgba(238,125,119,0.25); }
+            100% { transform: scale(1.03); box-shadow: 0 0 80px rgba(238,125,119,0.4); }
         }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        #action-btn span:first-child {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+        /* Hidden utility */
+        .hidden { display: none !important; }
 
-        #action-btn span:last-child {
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 4px;
-            opacity: 0.9;
-            margin-top: 4px;
-        }
+        /* Connection status dot colors */
+        .status-online .status-dot { background-color: #89a495; box-shadow: 0 0 6px rgba(137,164,149,0.6); }
+        .status-offline .status-dot { background-color: #ee7d77; box-shadow: 0 0 6px rgba(238,125,119,0.6); }
+        .status-syncing .status-dot { background-color: #e0f4ff; animation: pulse 1s infinite alternate; }
+        .status-pending .status-dot { background-color: #bfd8e5; }
+        @keyframes pulse { to { transform: scale(1.4); opacity: 0.6; } }
 
-        /* History Styles - TAB 2 */
-        #history-section {
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .history-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .btn-add {
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border);
-            color: var(--accent-brand);
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            box-shadow: var(--glass-shadow);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-add:hover {
-            background: var(--accent-brand);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        #history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .history-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .history-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .history-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .history-time {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .history-date {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .history-duration {
-            font-size: 0.85rem;
-            color: var(--accent-brand);
-            background: rgba(59, 130, 246, 0.1);
-            padding: 4px 8px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 4px;
-            font-weight: 600;
-        }
-
-        .history-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-action {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-subtle);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .btn-edit {
-            color: var(--accent-brand);
-        }
-
-        .btn-delete {
-            color: var(--danger-color);
-        }
-
-        .btn-action:hover {
-            transform: scale(1.1);
-            border-color: currentColor;
-        }
-
-        /* Bottom Nav - Glassmorphism */
-        #bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-            z-index: 20;
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--nav-inactive);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px 0;
-            transition: color 0.3s ease;
-        }
-
-        .nav-item.active {
-            color: var(--accent-brand);
-        }
-
-        .nav-icon {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .nav-item.active .nav-icon {
-            transform: scale(1.15) translateY(-2px);
-            filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
-        }
-
-        /* Utilities & Layout elements */
-        .hidden {
-            display: none !important;
-        }
-
-        #loading {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
+        /* Toast */
         .toast {
-            position: fixed;
-            top: 24px;
-            left: 50%;
+            position: fixed; top: 24px; left: 50%; z-index: 9999;
             transform: translateX(-50%) translateY(-20px);
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(8px);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 100px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0; visibility: hidden;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1000;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
+        .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-        [data-theme="dark"] .toast {
-            background: rgba(255, 255, 255, 0.9);
-            color: #0f172a;
-        }
-
-        .toast.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Connection Status Pill */
-        #connection-status {
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-            border-radius: 100px;
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-subtle);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
-        }
-
-        .status-online .status-dot {
-            background-color: #10b981;
-            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
-        }
-
-        .status-offline .status-dot {
-            background-color: #ef4444;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-        }
-
-        .status-syncing .status-dot {
-            background-color: #f59e0b;
-            animation: pulse 1s infinite alternate;
-        }
-
-        .status-pending .status-dot {
-            background-color: #f59e0b;
-        }
-
-        @keyframes pulse {
-            to {
-                transform: scale(1.3);
-                opacity: 0.7;
-            }
-        }
-
-        #clear-queue-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 4px;
-        }
-
-        /* Glassmorphism Modals */
+        /* Modal overlay */
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            position: fixed; inset: 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
         }
-
-        .modal-overlay:not(.hidden) {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--secondary-bg);
-            padding: 30px;
-            border-radius: 28px;
-            width: 90%;
-            max-width: 380px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--border-subtle);
+        .modal-overlay:not(.hidden) { opacity: 1; visibility: visible; }
+        .modal-overlay:not(.hidden) .modal-box { transform: scale(1) translateY(0); }
+        .modal-box {
             transform: scale(0.95) translateY(20px);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .modal-overlay:not(.hidden) .modal {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal h2 {
-            margin-top: 0;
-            color: var(--text-primary);
-            margin-bottom: 24px;
-            font-size: 1.4rem;
-            font-weight: 800;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border-subtle);
-            border-radius: 12px;
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-brand);
-        }
-
-        /* To fix dark mode inputs on some browsers */
-        [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
-        [data-theme="dark"] input[type="time"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 28px;
-        }
-
-        .modal-buttons button {
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .modal-buttons button:active {
-            transform: scale(0.95);
-        }
-
-        .btn-cancel {
-            background: transparent;
-            border: 2px solid var(--border-subtle);
-            color: var(--text-primary);
-        }
-
-        .btn-cancel:hover {
-            background: var(--border-subtle);
-        }
-
-        .btn-save {
-            background: var(--accent-gradient);
-            border: none;
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
+        /* Asymmetric grid */
+        .asymmetric-grid { display: grid; grid-template-columns: 1fr 2fr; }
     </style>
 </head>
+<body class="bg-surface text-on-surface bg-background flex flex-col pb-20">
 
-<body>
-
-    <div id="loading" class="hidden">
-        <div class="spinner"></div>
+    <!-- Loading Overlay -->
+    <div id="loading" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[9999]">
+        <div class="w-12 h-12 border-4 border-outline-variant border-t-primary rounded-full" style="animation: spin 1s linear infinite;"></div>
     </div>
 
-    <div id="toast" class="toast">Action Saved</div>
-
-    <!-- Export Modal -->
-    <div id="export-modal" class="modal-overlay hidden">
-        <div class="modal">
-            <h2>Export Shifts</h2>
-            <div class="form-group">
-                <label>Export Range</label>
-                <div style="display: flex; gap: 15px; margin-top: 10px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; color: var(--text-primary);">
-                        <input type="radio" name="export-range" value="current" checked style="width: auto; margin: 0;">
-                        <span id="export-current-label">Current Month</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; color: var(--text-primary);">
-                        <input type="radio" name="export-range" value="all" style="width: auto; margin: 0;">
-                        <span>Whole Sheet</span>
-                    </label>
-                </div>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeExportModal()">Cancel</button>
-                <button class="btn-save" onclick="generatePDF()">Download PDF</button>
-            </div>
-        </div>
-    </div>
+    <!-- Toast -->
+    <div id="toast" class="toast bg-surface-container-high text-on-surface px-6 py-3 rounded-sm text-sm font-bold tracking-wider uppercase shadow-[0_8px_32px_rgba(0,0,0,0.4)]">Action Saved</div>
 
     <!-- Edit Modal -->
-    <div id="edit-modal" class="modal-overlay hidden">
-        <div class="modal">
-            <h2>Edit Shift</h2>
+    <div id="edit-modal" class="modal-overlay hidden bg-black/60 backdrop-blur-sm">
+        <div class="modal-box bg-surface-container-high w-[90%] max-w-sm p-8 rounded-sm">
+            <h2 class="text-on-surface font-black text-xl uppercase tracking-wider mb-8">Edit Shift</h2>
             <input type="hidden" id="edit-id">
-
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="edit-date">
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-3" for="edit-date">Date</label>
+                    <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-lg py-2 px-0 text-on-surface" id="edit-date" type="date"/>
+                </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-3" for="edit-start-time">Start</label>
+                        <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-lg py-2 px-0 text-on-surface" id="edit-start-time" type="time" step="1"/>
+                    </div>
+                    <div>
+                        <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-3" for="edit-end-time">End</label>
+                        <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-lg py-2 px-0 text-on-surface" id="edit-end-time" type="time" step="1"/>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-3" for="edit-note">Note</label>
+                    <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-lg py-2 px-0 text-on-surface placeholder:text-outline-variant" id="edit-note" type="text" placeholder="Optional notes..."/>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Start Time</label>
-                <input type="time" id="edit-start-time" step="1">
-            </div>
-
-            <div class="form-group">
-                <label>End Time</label>
-                <input type="time" id="edit-end-time" step="1">
-            </div>
-
-            <div class="form-group">
-                <label>Note</label>
-                <input type="text" id="edit-note" placeholder="Optional notes...">
-            </div>
-
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-                <button class="btn-save" onclick="saveEdit()">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Modal -->
-    <div id="add-modal" class="modal-overlay hidden">
-        <div class="modal">
-            <h2>Add Past Shift</h2>
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="add-date">
-            </div>
-            <div class="form-group">
-                <label>Start Time</label>
-                <input type="time" id="add-start-time" step="1">
-            </div>
-
-            <div class="form-group">
-                <label>End Time</label>
-                <input type="time" id="add-end-time" step="1">
-            </div>
-
-            <div class="form-group">
-                <label>Note</label>
-                <input type="text" id="add-note" placeholder="Optional notes...">
-            </div>
-
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
-                <button class="btn-save" onclick="saveManualShift()">Add Record</button>
+            <div class="flex justify-end gap-4 mt-10">
+                <button class="px-6 py-3 bg-surface-container-highest text-on-surface text-sm font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors" onclick="closeEditModal()">Cancel</button>
+                <button class="px-6 py-3 bg-gradient-to-br from-primary to-primary-dim text-on-primary text-sm font-bold uppercase tracking-widest active:scale-95 duration-150" onclick="saveEdit()">Save</button>
             </div>
         </div>
     </div>
 
-    <!-- Configuration Panel -->
-    <div id="config-panel">
-        <input type="text" id="webapp-url" placeholder="Paste your Web App URL here..." autocomplete="off"
-            onchange="saveUrl()">
+    <!-- Config Panel (hidden when HARDCODED_WEB_APP_URL is set) -->
+    <div id="config-panel" class="bg-surface-container-low px-8 py-3 text-center">
+        <input class="w-full max-w-md bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-sm py-2 px-0 text-on-surface placeholder:text-outline-variant" type="text" id="webapp-url" placeholder="Paste your Web App URL here..." autocomplete="off" onchange="saveUrl()">
     </div>
 
-    <header>
-        <h1>DairyShift</h1>
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div id="connection-status" class="status-online">
-                <div class="status-dot"></div>
-                <span id="status-text">Online</span>
-                <button id="clear-queue-btn" class="hidden" onclick="clearQueue()"
-                    title="Clear Pending Actions">Clear</button>
+    <!-- TopAppBar -->
+    <header class="w-full top-0 sticky z-50 bg-[#0e0e0e]">
+        <div class="flex justify-between items-center px-8 py-4 w-full bg-[#131313]">
+            <div class="flex items-center gap-3">
+                <div id="connection-status" class="status-online flex items-center gap-2">
+                    <div class="status-dot w-2 h-2 rounded-full"></div>
+                    <span id="status-text" class="text-on-surface-variant text-[10px] font-bold tracking-widest uppercase">Online</span>
+                    <button id="clear-queue-btn" class="hidden text-[10px] font-bold text-error hover:text-error-dim" onclick="clearQueue()">Clear</button>
+                </div>
             </div>
-            <button id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
+            <div class="text-primary font-black tracking-[0.2em] text-lg uppercase">DAIRYSHIFT</div>
+            <button id="theme-toggle" onclick="toggleTheme()" class="text-primary hover:bg-surface-container-high transition-colors active:scale-95 duration-150 p-2 rounded-sm">
+                <span class="material-symbols-outlined text-xl">dark_mode</span>
             </button>
         </div>
     </header>
 
-    <div id="main-content">
-        <!-- TAB 1: TIMER -->
-        <div id="tab-timer" class="tab-content active">
-            <div id="status-display">
-                <div id="timer">00:00:00</div>
-                <div id="shift-status">Ready to connect</div>
-            </div>
+    <!-- Main Content -->
+    <div id="main-content" class="flex-1 overflow-y-auto pb-24" style="scrollbar-width: none;">
 
-            <button id="action-btn" class="btn-start" onclick="handleButtonClick()" aria-label="Start Shift">
-                <span>START</span>
-                <span>SHIFT</span>
-            </button>
+        <!-- TAB 1: TIMER -->
+        <div id="tab-timer" class="tab-content active flex-col items-center justify-center px-8 pb-32 min-h-full">
+            <main class="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto">
+                <!-- Status Label -->
+                <div class="mb-12 text-left w-full">
+                    <span class="text-on-surface-variant font-label text-[0.75rem] uppercase tracking-[0.2em]">Current Status</span>
+                    <h2 id="shift-status" class="text-on-surface font-headline text-2xl font-bold mt-1">OFF DUTY</h2>
+                </div>
+                <!-- Central Interaction Zone -->
+                <div class="relative flex flex-col items-center">
+                    <!-- Glassmorphism Ring Effect -->
+                    <div class="absolute inset-0 scale-125 rounded-full bg-primary/5 blur-3xl"></div>
+                    <!-- Timer Display -->
+                    <div class="mb-8 flex flex-col items-center">
+                        <span class="text-on-surface-variant font-label text-[0.75rem] uppercase tracking-[0.2em] mb-2">Duration</span>
+                        <div id="timer" class="text-[5rem] font-black tracking-tighter text-surface-container-highest leading-none">00:00:00</div>
+                    </div>
+                    <!-- The Monolithic Button -->
+                    <button id="action-btn" class="btn-start relative group active:scale-95 transition-all duration-300 w-64 h-64 rounded-full flex items-center justify-center" onclick="handleButtonClick()" aria-label="Start Shift">
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-primary to-primary-dim btn-start-inner"></div>
+                        <div class="relative flex flex-col items-center z-10" id="action-btn-content">
+                            <span class="material-symbols-outlined text-on-primary text-5xl mb-2" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            <span class="text-on-primary font-black tracking-widest uppercase text-sm">START SHIFT</span>
+                        </div>
+                        <div class="absolute inset-0 border-[8px] border-white/10 rounded-full"></div>
+                    </button>
+                </div>
+                <!-- Secondary Info Bento Grid -->
+                <div class="mt-24 grid grid-cols-2 gap-4 w-full">
+                    <div class="bg-surface-container p-6 flex flex-col">
+                        <span class="text-on-surface-variant font-label text-[0.7rem] uppercase tracking-widest mb-2">Last Shift</span>
+                        <span id="last-shift-hrs" class="text-on-surface font-bold text-lg">--:--:--</span>
+                        <span id="last-shift-date" class="text-on-surface-variant text-xs mt-1">No data</span>
+                    </div>
+                    <div class="bg-surface-container p-6 flex flex-col">
+                        <span class="text-on-surface-variant font-label text-[0.7rem] uppercase tracking-widest mb-2">This Cycle</span>
+                        <span id="cycle-total-hrs" class="text-on-surface font-bold text-lg">-- hrs</span>
+                        <span id="cycle-shift-count" class="text-on-surface-variant text-xs mt-1">-- shifts</span>
+                    </div>
+                </div>
+            </main>
         </div>
 
         <!-- TAB 2: HISTORY -->
-        <div id="tab-history" class="tab-content">
-            <div id="history-section">
-                <div class="history-header-row">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <button class="btn-nav-month" id="btn-prev-month" onclick="changeMonth(-1)"
-                            title="Previous Month">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
+        <div id="tab-history" class="tab-content flex-col">
+            <div id="history-section" class="max-w-4xl mx-auto px-6 mt-8 w-full">
+                <!-- Cycle Selector -->
+                <section class="mb-12">
+                    <div class="flex items-center justify-between bg-surface-container p-6 rounded-sm">
+                        <button id="btn-prev-month" class="p-2 hover:bg-surface-container-high transition-colors rounded-sm active:scale-90" onclick="changeMonth(-1)">
+                            <span class="material-symbols-outlined text-primary">chevron_left</span>
                         </button>
-                        <h3 id="history-month-label" style="margin: 0; min-width: 120px; text-align: center;">Recent
-                            History</h3>
-                        <button class="btn-nav-month" id="btn-next-month" onclick="changeMonth(1)" title="Next Month"
-                            disabled style="opacity: 0.3; cursor: not-allowed;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
+                        <div class="text-center">
+                            <p class="font-bold tracking-widest uppercase text-[10px] text-on-surface-variant mb-1">CURRENT CYCLE</p>
+                            <h2 id="history-month-label" class="text-2xl font-bold tracking-tight text-on-surface">Loading...</h2>
+                        </div>
+                        <button id="btn-next-month" class="p-2 hover:bg-surface-container-high transition-colors rounded-sm active:scale-90 opacity-30 cursor-not-allowed" onclick="changeMonth(1)" disabled>
+                            <span class="material-symbols-outlined text-primary">chevron_right</span>
                         </button>
                     </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-add" style="background: var(--accent-brand); color: white;" onclick="openExportModal()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Export
-                        </button>
-                        <button class="btn-add" onclick="openAddModal()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Add Shift
+                </section>
+                <!-- Metrics Summary -->
+                <section class="asymmetric-grid gap-4 mb-12">
+                    <div class="bg-surface-container-low p-6 flex flex-col justify-end">
+                        <p class="font-bold text-[10px] tracking-wider uppercase text-on-surface-variant">TOTAL SHIFTS</p>
+                        <span id="history-total-shifts" class="text-5xl font-black text-primary">0</span>
+                    </div>
+                    <div class="bg-surface-container p-6 flex flex-col justify-end relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4">
+                            <span class="material-symbols-outlined text-secondary opacity-40 text-4xl">schedule</span>
+                        </div>
+                        <p class="font-bold text-[10px] tracking-wider uppercase text-on-surface-variant">ACCUMULATED HOURS</p>
+                        <span id="history-total-hours" class="text-5xl font-black text-on-surface">0<span class="text-lg ml-2 text-on-surface-variant">HRS</span></span>
+                    </div>
+                </section>
+                <!-- Shift List -->
+                <section>
+                    <h3 class="font-black tracking-widest uppercase text-xs text-on-surface-variant mb-6 px-2">SHIFT ENTRIES</h3>
+                    <div id="history-list" class="space-y-4">
+                        <div class="text-center text-on-surface-variant py-12">
+                            <span class="material-symbols-outlined text-4xl opacity-30 mb-4 block">schedule</span>
+                            Waiting for connection...
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- TAB 3: MANUAL ENTRY -->
+        <div id="tab-entry" class="tab-content flex-col">
+            <div class="max-w-xl mx-auto px-8 pt-12 w-full">
+                <!-- Section Header -->
+                <header class="mb-12 border-l-4 border-primary pl-6">
+                    <p class="text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-2">Manual Logging</p>
+                    <h2 class="text-4xl font-black text-on-surface tracking-tight">ENTRY</h2>
+                </header>
+                <!-- Form -->
+                <section class="space-y-10">
+                    <!-- Date Picker -->
+                    <div>
+                        <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-4" for="entry-date">Shift Date</label>
+                        <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-xl py-3 px-0 transition-colors placeholder-outline-variant font-medium text-on-surface" id="entry-date" type="date"/>
+                    </div>
+                    <!-- Time Pickers -->
+                    <div class="grid grid-cols-2 gap-12">
+                        <div>
+                            <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-4" for="entry-start-time">Start Time</label>
+                            <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-xl py-3 px-0 transition-colors font-medium text-on-surface" id="entry-start-time" type="time" oninput="updateEntryDuration()"/>
+                        </div>
+                        <div>
+                            <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-4" for="entry-end-time">End Time</label>
+                            <input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-secondary focus:ring-0 text-xl py-3 px-0 transition-colors font-medium text-on-surface" id="entry-end-time" type="time" oninput="updateEntryDuration()"/>
+                        </div>
+                    </div>
+                    <!-- Estimated Duration -->
+                    <div class="bg-surface-container p-8 rounded-sm relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h3 class="text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-4">Estimated Duration</h3>
+                            <div class="flex items-baseline gap-2">
+                                <span id="entry-hrs" class="text-5xl font-black text-primary">00</span>
+                                <span class="text-xl font-bold text-on-surface-variant">HRS</span>
+                                <span id="entry-mins" class="text-5xl font-black text-primary ml-4">00</span>
+                                <span class="text-xl font-bold text-on-surface-variant">MIN</span>
+                            </div>
+                        </div>
+                        <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+                            <span class="material-symbols-outlined text-[120px]">timer</span>
+                        </div>
+                    </div>
+                    <!-- Notes -->
+                    <div>
+                        <label class="block text-[0.75rem] font-bold tracking-widest text-on-surface-variant uppercase mb-4" for="entry-note">Notes (Optional)</label>
+                        <textarea class="w-full bg-surface-container-high border-none focus:ring-2 focus:ring-secondary/50 text-on-surface p-4 transition-all placeholder:text-outline-variant resize-none rounded-sm" id="entry-note" placeholder="Add specific tasks or herd observations..." rows="3"></textarea>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="pt-8">
+                        <button onclick="saveEntryShift()" class="w-full h-16 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-black tracking-[0.2em] uppercase rounded-sm hover:opacity-90 active:scale-95 duration-200 shadow-[0_8px_24px_rgba(198,198,198,0.15)] flex items-center justify-center gap-3">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                            ADD SHIFT
                         </button>
                     </div>
+                </section>
+                <!-- Info Notice -->
+                <div class="mt-16 mb-8 bg-surface-container-low p-6 flex items-start gap-4 rounded-sm">
+                    <span class="material-symbols-outlined text-secondary">info</span>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Manual entries are flagged for supervisor review. Ensure your start and end times reflect precise milking cycles.</p>
                 </div>
-                <div id="history-list">
-                    <div style="text-align: center; color: var(--text-secondary); padding: 40px 20px;">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-                            style="opacity: 0.5; margin-bottom: 12px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        <br>Waiting for connection...
+            </div>
+        </div>
+
+        <!-- TAB 4: SETTINGS -->
+        <div id="tab-settings" class="tab-content flex-col">
+            <div class="max-w-4xl mx-auto px-8 pt-12 w-full pb-8">
+                <!-- Editorial Header -->
+                <section class="mb-16">
+                    <h2 class="text-on-surface-variant font-label text-[0.75rem] uppercase tracking-widest mb-2">System Configuration</h2>
+                    <p class="text-[2.75rem] font-black leading-tight tracking-tighter text-on-surface">SETTINGS</p>
+                </section>
+                <!-- Bento Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <!-- Salary Cycle Card -->
+                    <div class="md:col-span-8 bg-surface-container-high p-8 flex flex-col justify-between rounded-sm">
+                        <div>
+                            <h3 class="text-on-surface-variant font-label text-[0.65rem] uppercase tracking-[0.15em] mb-4">Salary Cycle</h3>
+                            <p class="font-bold text-on-surface mb-8">Cycle restart day determines the period for automated earnings calculation.</p>
+                        </div>
+                        <div class="flex items-end justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-on-surface-variant text-xs mb-1">Current Anchor</span>
+                                <span id="settings-cycle-day" class="text-4xl font-black text-primary">--</span>
+                            </div>
+                            <button onclick="changeCycleDay()" class="px-6 py-3 bg-surface-container-highest border-b-2 border-outline-variant text-on-surface text-sm font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors rounded-sm">
+                                Change Day
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Dark/Light Mode Switcher -->
+                    <div class="md:col-span-4 bg-surface-container p-8 flex flex-col items-center justify-center text-center rounded-sm">
+                        <span class="material-symbols-outlined text-4xl text-primary mb-4">dark_mode</span>
+                        <h3 class="text-on-surface font-bold uppercase tracking-widest text-xs mb-6">Visual Mode</h3>
+                        <div class="flex bg-surface-container-lowest p-1 rounded-sm w-full">
+                            <button id="settings-dark-btn" class="flex-1 py-2 bg-primary text-on-primary font-bold text-[10px] uppercase tracking-tighter rounded-sm">Dark</button>
+                            <button id="settings-light-btn" class="flex-1 py-2 text-on-surface-variant font-bold text-[10px] uppercase tracking-tighter hover:text-on-surface rounded-sm opacity-50 cursor-not-allowed" title="Dark mode only">Light</button>
+                        </div>
+                    </div>
+                    <!-- Google Sheets Sync -->
+                    <div class="md:col-span-12 bg-surface-container-low p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-l-4 border-secondary rounded-sm">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-sm">
+                                <span class="material-symbols-outlined text-on-secondary-container">sync</span>
+                            </div>
+                            <div>
+                                <h3 class="text-on-surface font-bold uppercase tracking-widest text-xs mb-1">Google Sheets Sync</h3>
+                                <p id="settings-sync-time" class="text-on-surface-variant text-sm">Checking...</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span id="settings-sync-badge" class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest rounded-full">Active</span>
+                            <button onclick="toggleConfigPanel()" class="p-3 hover:bg-surface-variant rounded-sm transition-colors">
+                                <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Export Section -->
+                    <div class="md:col-span-12 bg-surface-container-high p-10 mt-6 relative overflow-hidden rounded-sm">
+                        <div class="relative z-10">
+                            <h2 class="text-on-surface-variant font-label text-[0.75rem] uppercase tracking-widest mb-4">Export Records</h2>
+                            <h3 class="text-3xl font-black text-on-surface mb-8 max-w-md">Generate detailed PDF reports for payroll submission.</h3>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button onclick="exportPDF('current')" class="h-16 flex-1 flex items-center justify-center gap-3 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-black uppercase tracking-[0.2em] text-sm active:scale-95 duration-150 rounded-sm">
+                                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                                    PDF EXPORT
+                                </button>
+                                <div class="flex gap-2">
+                                    <button onclick="exportPDF('current')" class="px-6 h-16 bg-surface-container-highest text-on-surface text-[10px] font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors rounded-sm">Current Month</button>
+                                    <button onclick="exportPDF('all')" class="px-6 h-16 bg-surface-container-highest text-on-surface text-[10px] font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors rounded-sm">All History</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -right-20 -bottom-20 opacity-5 pointer-events-none">
+                            <span class="material-symbols-outlined text-[20rem]">description</span>
+                        </div>
+                    </div>
+                    <!-- Danger Zone -->
+                    <div class="md:col-span-12 mt-12 pt-8 border-t border-outline-variant/15">
+                        <h3 class="text-error-dim font-bold uppercase tracking-widest text-xs mb-6">Security &amp; Data</h3>
+                        <div class="flex flex-col gap-4">
+                            <div onclick="backupDatabase()" class="flex justify-between items-center py-4 px-6 bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer group rounded-sm">
+                                <span class="text-on-surface text-sm font-medium">Backup local database</span>
+                                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">database</span>
+                            </div>
+                            <div onclick="clearLocalHistory()" class="flex justify-between items-center py-4 px-6 bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer group rounded-sm">
+                                <span class="text-error font-medium text-sm">Clear all local shift history</span>
+                                <span class="material-symbols-outlined text-error">delete_forever</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- BOTTOM NAV -->
-    <nav id="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('timer')">
-            <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <span>Timer</span>
+    <!-- Bottom Navigation -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-6 pb-safe bg-[#191a1a]/80 backdrop-blur-xl z-50 border-t border-[#484848]/15 shadow-[0_-8px_32px_rgba(231,229,228,0.04)]">
+        <button class="nav-item flex flex-col items-center justify-center bg-primary text-on-primary rounded-sm px-4 py-1 active:scale-90 duration-200 transition-all" onclick="switchTab('timer')">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">timer</span>
+            <span class="font-bold text-[10px] tracking-wider uppercase">SHIFT</span>
         </button>
-        <button class="nav-item" onclick="switchTab('history')">
-            <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span>History</span>
+        <button class="nav-item flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-on-surface active:scale-90 duration-200 transition-all" onclick="switchTab('history')">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <span class="font-bold text-[10px] tracking-wider uppercase">HISTORY</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-on-surface active:scale-90 duration-200 transition-all" onclick="switchTab('entry')">
+            <span class="material-symbols-outlined">edit_square</span>
+            <span class="font-bold text-[10px] tracking-wider uppercase">ENTRY</span>
+        </button>
+        <button class="nav-item flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-on-surface active:scale-90 duration-200 transition-all" onclick="switchTab('settings')">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-bold text-[10px] tracking-wider uppercase">SETTINGS</span>
         </button>
     </nav>
 
     <script>
-        // --- Configuration ---
-        // PASTE YOUR WEB APP URL HERE TO HIDE THE INPUT BOX
+        // ============================================================
+        // Configuration
+        // ============================================================
         const HARDCODED_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyv7yOtTh4TxivCKTtdFNDOBqdG2Q9qvQDOehoidKrpLn1rJpHkqz_3QF3QLG2HR3sIgA/exec";
 
         let timerInterval;
@@ -954,13 +504,17 @@
         let queue = JSON.parse(localStorage.getItem('dairyshift_queue') || '[]');
         let isOnline = navigator.onLine;
         let isSyncing = false;
+        let currentMonthOffset = 0;
+        let currentMonthDataForExport = [];
+        let currentMonthLabelForExport = "";
 
-        // --- Initialization ---
+        // ============================================================
+        // Initialization
+        // ============================================================
         window.onload = function () {
             const urlInput = document.getElementById('webapp-url');
             const configPanel = document.getElementById('config-panel');
 
-            // Setup Config
             if (HARDCODED_WEB_APP_URL) {
                 configPanel.style.display = 'none';
                 webAppUrl = HARDCODED_WEB_APP_URL;
@@ -968,15 +522,11 @@
                 urlInput.value = webAppUrl;
             }
 
-            // Restore Local State if available
+            // Restore Local State
             const savedState = JSON.parse(localStorage.getItem('dairyshift_state') || 'null');
             if (savedState) {
                 updateUIState(savedState, false);
             }
-
-            // Restore Theme
-            const savedTheme = localStorage.getItem('dairyshift_theme') || 'light';
-            applyTheme(savedTheme);
 
             // Restore Tab
             const savedTab = localStorage.getItem('dairyshift_tab') || 'timer';
@@ -985,17 +535,15 @@
             // Listeners
             window.addEventListener('online', handleIdentityChange);
             window.addEventListener('offline', handleIdentityChange);
-
-            // Initial Status
             handleIdentityChange();
 
-            // Start Heartbeat
             if (webAppUrl) {
                 refreshData();
-                setInterval(heartbeat, 60000); // Check status every minute
-                setInterval(processQueue, 10000); // Retry queue every 10 seconds
+                loadSettings();
+                setInterval(heartbeat, 60000);
+                setInterval(processQueue, 10000);
             } else {
-                document.getElementById('shift-status').innerText = "Please enter Web App URL above";
+                document.getElementById('shift-status').innerText = "Enter Web App URL in Settings";
             }
         };
 
@@ -1005,65 +553,61 @@
             refreshData();
         }
 
-        // --- Connection & Queue Manager ---
+        // ============================================================
+        // Connection & Queue Manager
+        // ============================================================
         function handleIdentityChange() {
             isOnline = navigator.onLine;
             updateConnectionUI();
-            if (isOnline) {
-                processQueue();
-            }
+            if (isOnline) processQueue();
         }
 
         function updateConnectionUI() {
             const el = document.getElementById('connection-status');
             const text = document.getElementById('status-text');
             const clearBtn = document.getElementById('clear-queue-btn');
-
+            const syncBadge = document.getElementById('settings-sync-badge');
             const hasQueue = queue.length > 0;
 
             if (hasQueue) clearBtn.classList.remove('hidden');
             else clearBtn.classList.add('hidden');
 
             if (isSyncing) {
-                el.className = 'status-syncing';
+                el.className = 'status-syncing flex items-center gap-2';
                 text.innerText = 'Syncing...';
+                if (syncBadge) { syncBadge.innerText = 'Syncing'; syncBadge.className = 'px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-black uppercase tracking-widest rounded-full'; }
             } else if (!isOnline) {
-                el.className = 'status-offline';
+                el.className = 'status-offline flex items-center gap-2';
                 text.innerText = hasQueue ? `Offline (${queue.length})` : 'Offline';
+                if (syncBadge) { syncBadge.innerText = 'Offline'; syncBadge.className = 'px-3 py-1 bg-error-container text-on-error-container text-[10px] font-black uppercase tracking-widest rounded-full'; }
             } else if (hasQueue) {
-                el.className = 'status-pending';
+                el.className = 'status-pending flex items-center gap-2';
                 text.innerText = `Pending (${queue.length})`;
+                if (syncBadge) { syncBadge.innerText = 'Pending'; syncBadge.className = 'px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-black uppercase tracking-widest rounded-full'; }
             } else {
-                el.className = 'status-online';
+                el.className = 'status-online flex items-center gap-2';
                 text.innerText = 'Online';
+                if (syncBadge) { syncBadge.innerText = 'Active'; syncBadge.className = 'px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest rounded-full'; }
             }
         }
 
         async function processQueue() {
             if (queue.length === 0 || isSyncing || !isOnline) return;
-
             isSyncing = true;
             updateConnectionUI();
 
             try {
                 const item = queue[0];
-                console.log("Processing queue item:", item);
-
                 let body = null;
                 if (item.action === 'start' || item.action === 'end') {
                     body = JSON.stringify({ timestamp: item.timestamp });
                 }
-
                 await callApi(item.action, 'POST', body);
-
                 queue.shift();
                 saveQueue();
 
                 if (queue.length > 0) {
-                    setTimeout(() => {
-                        isSyncing = false;
-                        processQueue();
-                    }, 500);
+                    setTimeout(() => { isSyncing = false; processQueue(); }, 500);
                 } else {
                     isSyncing = false;
                     showToast("Sync Complete");
@@ -1071,15 +615,13 @@
                 }
             } catch (err) {
                 console.error("Sync failed:", err);
-                // Track retries - discard item after 3 failures to prevent permanent blocking
                 const item = queue[0];
                 if (item) {
                     item.retries = (item.retries || 0) + 1;
                     if (item.retries >= 3) {
-                        console.warn("Discarding stuck queue item after 3 retries:", item);
                         queue.shift();
                         saveQueue();
-                        showToast("Action failed after retries - discarded");
+                        showToast("Action failed after retries");
                     }
                 }
                 isSyncing = false;
@@ -1108,15 +650,14 @@
             }
         }
 
-        let currentMonthOffset = 0;
-
+        // ============================================================
+        // Data Refresh
+        // ============================================================
         function changeMonth(delta) {
             currentMonthOffset += delta;
-
-            // Disable next button if we are at the current month or future
             const nextBtn = document.getElementById('btn-next-month');
             if (currentMonthOffset >= 0) {
-                currentMonthOffset = 0; // Prevent going into the future
+                currentMonthOffset = 0;
                 nextBtn.disabled = true;
                 nextBtn.style.opacity = '0.3';
                 nextBtn.style.cursor = 'not-allowed';
@@ -1125,7 +666,6 @@
                 nextBtn.style.opacity = '1';
                 nextBtn.style.cursor = 'pointer';
             }
-
             refreshData();
         }
 
@@ -1134,15 +674,11 @@
             const isInitial = document.getElementById('timer').innerText === "00:00:00";
             if (isInitial && queue.length === 0) showLoading(true);
 
-            if (queue.length > 0 && isOnline) {
-                processQueue();
-                return;
-            }
+            if (queue.length > 0 && isOnline) { processQueue(); return; }
 
             callApi('getStatus')
                 .then(state => {
                     if (queue.length === 0) updateUIState(state);
-                    // Pass currentMonthOffset as a query parameter
                     return callApi('getHistory', 'GET', null, { offset: currentMonthOffset });
                 })
                 .then(renderHistory)
@@ -1153,52 +689,33 @@
                 .finally(() => showLoading(false));
         }
 
-        // --- API Helper ---
+        // ============================================================
+        // API Helper
+        // ============================================================
         async function callApi(action, method = 'GET', body = null, params = {}) {
             if (!webAppUrl) throw new Error("No Web App URL provided");
 
-            // GAS Endpoint usually requires redirects to be followed.
-            // Also note that 'fetch' from local file might hit CORS.
-            // Apps Script simple GET/POST allows CORS if properly set up.
-
-            // Append action to URL for GET
             let url = webAppUrl;
             if (url.includes('?')) url += '&action=' + action;
             else url += '?action=' + action;
 
-            // Append additional search params
             for (const [key, value] of Object.entries(params)) {
                 url += `&${key}=${encodeURIComponent(value)}`;
             }
 
-            const options = {
-                method: method,
-                headers: {
-                    // 'Content-Type': 'application/json' // GAS doesn't always like content-type headers from simple cors
-                },
-            };
-
-            if (method === 'POST') {
-                options.method = 'POST';
-                if (body) {
-                    options.body = body;
-                    // options.header['Content-Type'] ... GAS might complain, let's see. 
-                    // usually text/plain is safest for GAS doPost(e) -> e.postData.contents
-                }
+            const options = { method: method, headers: {} };
+            if (method === 'POST' && body) {
+                options.body = body;
             }
 
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s for GAS cold starts
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
             options.signal = controller.signal;
 
             try {
                 const response = await fetch(url, options);
                 clearTimeout(timeoutId);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const json = await response.json();
                 if (json.error) throw new Error(json.error);
                 return json;
@@ -1208,17 +725,13 @@
             }
         }
 
-        // --- Core Logic ---
+        // ============================================================
+        // Core Logic — Shift Start/Stop
+        // ============================================================
         function handleButtonClick() {
             const btn = document.getElementById('action-btn');
             const isStart = btn.classList.contains('btn-start');
             const action = isStart ? 'start' : 'end';
-
-            // Optimistic Update
-            const optimisticState = {
-                active: isStart,
-                startTime: isStart ? new Date().toISOString() : null
-            };
 
             if (isStart) {
                 updateUIState({ active: true, startTime: new Date().toISOString() });
@@ -1230,7 +743,6 @@
 
             queue.push({ action: action, timestamp: Date.now() });
             saveQueue();
-
             processQueue();
         }
 
@@ -1238,146 +750,45 @@
             if (!status) return;
             const btn = document.getElementById('action-btn');
             const statusText = document.getElementById('shift-status');
+            const timerEl = document.getElementById('timer');
+            const content = document.getElementById('action-btn-content');
 
             if (save) localStorage.setItem('dairyshift_state', JSON.stringify(status));
 
             if (status.active) {
-                btn.className = 'btn-stop';
-                btn.innerHTML = '<span>END</span><span style="font-size: 0.8rem; font-weight: 400; margin-top: 5px;">SHIFT</span>';
-                statusText.innerText = "Shift in Progress";
+                btn.className = 'btn-stop relative group active:scale-95 transition-all duration-300 w-64 h-64 rounded-full flex items-center justify-center';
+                content.innerHTML = `
+                    <span class="material-symbols-outlined text-white text-5xl mb-2" style="font-variation-settings: 'FILL' 1;">stop</span>
+                    <span class="text-white font-black tracking-widest uppercase text-sm">END SHIFT</span>
+                `;
+                statusText.innerText = "ON DUTY";
+                timerEl.className = 'text-[5rem] font-black tracking-tighter text-on-surface leading-none';
 
                 if (status.startTime) {
                     shiftStartTime = new Date(status.startTime);
                     startTimer();
                 }
             } else {
-                btn.className = 'btn-start';
-                btn.innerHTML = '<span>START</span><span style="font-size: 0.8rem; font-weight: 400; margin-top: 5px;">SHIFT</span>';
-                statusText.innerText = "Ready to start";
+                btn.className = 'btn-start relative group active:scale-95 transition-all duration-300 w-64 h-64 rounded-full flex items-center justify-center';
+                content.innerHTML = `
+                    <span class="material-symbols-outlined text-on-primary text-5xl mb-2" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    <span class="text-on-primary font-black tracking-widest uppercase text-sm">START SHIFT</span>
+                `;
+                statusText.innerText = "OFF DUTY";
+                timerEl.className = 'text-[5rem] font-black tracking-tighter text-surface-container-highest leading-none';
 
                 stopTimer();
-                document.getElementById('timer').innerText = "00:00:00";
+                timerEl.innerText = "00:00:00";
                 shiftStartTime = null;
             }
         }
 
-        let currentMonthDataForExport = [];
-        let currentMonthLabelForExport = "";
-
-        // --- Export Functions ---
-        function openExportModal() {
-            document.getElementById('export-current-label').innerText = currentMonthLabelForExport || "Current View";
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-
-        function closeExportModal() {
-            document.getElementById('export-modal').classList.add('hidden');
-        }
-
-        async function generatePDF() {
-            const range = document.querySelector('input[name="export-range"]:checked').value;
-            let exportData = [];
-            let title = "Shifts Report";
-
-            showLoading(true);
-            try {
-                if (range === 'current') {
-                    exportData = currentMonthDataForExport;
-                    title = `Shifts Report - ${currentMonthLabelForExport}`;
-                } else {
-                    let allData = [];
-                    let offset = 0;
-                    let emptyCount = 0;
-
-                    while (emptyCount < 2 && offset > -24) {
-                        const res = await callApi('getHistory', 'GET', null, { offset: offset });
-                        let mData = Array.isArray(res) ? res : (res && res.data ? res.data : []);
-                        if (mData.length === 0) {
-                            emptyCount++;
-                        } else {
-                            allData = allData.concat(mData);
-                            emptyCount = 0;
-                        }
-                        offset--;
-                    }
-                    exportData = allData;
-                    title = "All Shifts History";
-                }
-
-                if (!exportData || exportData.length === 0) {
-                    alert("No data available to export.");
-                    return;
-                }
-
-                const totalHours = exportData.reduce((sum, item) => sum + (parseFloat(item.hours) || 0), 0).toFixed(2);
-
-                const rows = exportData.map(item => {
-                    const dateStr = item.start.split(' ')[0];
-                    const dp = dateStr.split('-');
-                    const shortDate = parseInt(dp[1]) + '/' + parseInt(dp[2]);
-                    const startTimeStr = (item.start.split(' ')[1] || '').slice(0, 5);
-                    const endTimeStr = item.end ? (item.end.split(' ')[1] || '').slice(0, 5) : 'Active';
-                    const hours = item.hours || '0';
-                    const note = item.note || '';
-                    return `<tr>
-                        <td>${shortDate}</td>
-                        <td>${startTimeStr}</td>
-                        <td>${endTimeStr}</td>
-                        <td style="text-align:right">${hours}</td>
-                        <td>${note}</td>
-                    </tr>`;
-                }).join('');
-
-                const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${title}</title>
-<style>
-  body { font-family: sans-serif; padding: 16px; color: #111; margin: 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: #3b82f6; color: #fff; padding: 8px 10px; text-align: left; }
-  td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
-  tr:nth-child(even) td { background: #f8fafc; }
-  .total td { font-weight: bold; border-top: 2px solid #cbd5e1; }
-  @media print { body { padding: 0; } }
-</style>
-</head>
-<body>
-<table>
-  <thead><tr><th>Date</th><th>Start Time</th><th>End Time</th><th>Hours</th><th>Note</th></tr></thead>
-  <tbody>
-    ${rows}
-    <tr class="total">
-      <td colspan="3" style="text-align:right">Total Hours</td>
-      <td style="text-align:right">${totalHours}</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-</body>
-</html>`;
-
-                const win = window.open('', '_blank');
-                win.document.write(html);
-                win.document.close();
-                win.focus();
-                win.print();
-
-                closeExportModal();
-                showToast("Report ready to print / save as PDF");
-            } catch (err) {
-                console.error("Export failed:", err);
-                showError(err);
-            } finally {
-                showLoading(false);
-            }
-        }
-
+        // ============================================================
+        // History
+        // ============================================================
         function renderHistory(response) {
-            // response might be array (old api) or object { monthLabel, data } (new api)
             let historyData = [];
-            let title = "Recent History";
+            let title = "Loading...";
 
             if (Array.isArray(response)) {
                 historyData = response;
@@ -1385,74 +796,141 @@
                 historyData = response.data;
                 title = response.monthLabel || "History";
             }
-            
+
             currentMonthDataForExport = historyData;
             currentMonthLabelForExport = title;
 
+            // Update label
             const header = document.getElementById('history-month-label');
             if (header) header.innerText = title;
 
+            // Update metrics
+            updateHistoryMetrics(historyData);
+
+            // Update timer info cards
+            updateTimerInfoCards(historyData);
+
+            // Update sync time
+            const syncTime = document.getElementById('settings-sync-time');
+            if (syncTime) {
+                const now = new Date();
+                const h = now.getHours().toString().padStart(2, '0');
+                const m = now.getMinutes().toString().padStart(2, '0');
+                syncTime.innerText = `Last synchronized: Today, ${h}:${m}`;
+            }
+
+            // Render list
             const container = document.getElementById('history-list');
             container.innerHTML = '';
 
             if (!Array.isArray(historyData) || historyData.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; color: var(--text-secondary); padding: 40px 20px;">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; margin-bottom: 12px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <br>No shifts this month
+                    <div class="text-center text-on-surface-variant py-12">
+                        <span class="material-symbols-outlined text-4xl opacity-30 mb-4 block">schedule</span>
+                        No shifts this cycle
                     </div>`;
                 return;
             }
 
+            const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
             historyData.forEach(item => {
                 const dateStr = item.start.split(' ')[0];
                 const dateParts = dateStr.split('-');
-                const shortDate = parseInt(dateParts[1]) + '/' + parseInt(dateParts[2]);
-                const startTimeStr = item.start.split(' ')[1] || '';
-                const endTimeStr = item.end ? item.end.split(' ')[1] : 'Active';
+                const dateObj = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                const dayName = dayNames[dateObj.getDay()];
+                const monthName = monthNames[dateObj.getMonth()];
+                const dayNum = parseInt(dateParts[2]);
+
+                const startTimeStr = (item.start.split(' ')[1] || '').slice(0, 5);
+                const endTimeStr = item.end ? (item.end.split(' ')[1] || '').slice(0, 5) : '';
+                const hours = item.hours || '0';
+                const isActive = !item.end;
 
                 const safeNote = item.note ? item.note.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, "&quot;") : '';
                 const displayNote = item.note ? item.note.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : '';
 
                 const div = document.createElement('div');
-                div.className = 'history-item';
                 div.innerHTML = `
-                  <div class="history-info" style="flex: 1; min-width: 0; padding-right: 12px;">
-                    <div class="history-time">${startTimeStr.slice(0, 5)} - ${item.end ? endTimeStr.slice(0, 5) : 'Active'}</div>
-                    <div class="history-date">${shortDate}</div>
-                    ${item.hours ? `<div class="history-duration">${item.hours} hrs</div>` : `<div class="history-duration" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">On-going</div>`}
-                    ${displayNote ? `<div class="history-note" style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary); background: var(--primary-bg); border: 1px solid var(--border-subtle); padding: 8px; border-radius: 8px; white-space: pre-wrap; word-break: break-word;">${displayNote}</div>` : ''}
-                  </div>
-                  <div class="history-actions" style="align-self: flex-start;">
-                    <button class="btn-action btn-edit" onclick="openEditModal('${item.id}', '${item.start}', '${item.end || ''}', '${safeNote}')" title="Edit Record">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-action btn-delete" onclick="deleteItem('${item.id}', '${item.start}')" title="Delete Record">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                    </button>
-                  </div>
+                    <div class="group relative overflow-hidden bg-surface-container transition-all hover:bg-surface-container-high active:scale-[0.99] rounded-sm">
+                        <div class="flex items-center justify-between p-6">
+                            <div class="flex flex-col flex-1 min-w-0">
+                                <span class="font-black tracking-widest uppercase text-[10px] ${isActive ? 'text-secondary' : 'text-primary'} mb-1">${monthName} ${dayNum} (${dayName})</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-xl font-bold">${startTimeStr}</span>
+                                    <span class="material-symbols-outlined text-xs text-outline">arrow_forward</span>
+                                    <span class="text-xl font-bold">${isActive ? '<span class="text-secondary text-sm uppercase tracking-widest">Active</span>' : endTimeStr}</span>
+                                </div>
+                                ${displayNote ? `<div class="mt-2 text-xs text-on-surface-variant truncate">${displayNote}</div>` : ''}
+                            </div>
+                            <div class="flex items-center gap-4 ml-4">
+                                <div class="text-right">
+                                    <span class="text-2xl font-black ${isActive ? 'text-secondary' : 'text-on-surface'}">${isActive ? '--' : hours}</span>
+                                    <p class="font-bold text-[10px] tracking-wider uppercase text-on-surface-variant">TOTAL HRS</p>
+                                </div>
+                                <div class="flex gap-1">
+                                    <button onclick="openEditModal('${item.id}', '${item.start}', '${item.end || ''}', '${safeNote}')" class="p-2 hover:bg-surface-variant rounded-sm transition-colors">
+                                        <span class="material-symbols-outlined text-on-surface-variant text-lg">edit</span>
+                                    </button>
+                                    <button onclick="deleteItem('${item.id}', '${item.start}')" class="p-2 hover:bg-error-container/50 rounded-sm transition-colors">
+                                        <span class="material-symbols-outlined text-error-dim text-lg">delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute right-0 top-0 h-full w-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
                 `;
-                container.appendChild(div);
+                container.appendChild(div.firstElementChild);
             });
         }
 
-        // --- Edit Modal Functions ---
+        function updateHistoryMetrics(data) {
+            const totalShifts = data ? data.length : 0;
+            const totalHours = data ? data.reduce((sum, item) => sum + (parseFloat(item.hours) || 0), 0).toFixed(1) : '0';
+
+            const shiftsEl = document.getElementById('history-total-shifts');
+            const hoursEl = document.getElementById('history-total-hours');
+            if (shiftsEl) shiftsEl.innerText = totalShifts;
+            if (hoursEl) hoursEl.innerHTML = `${totalHours}<span class="text-lg ml-2 text-on-surface-variant">HRS</span>`;
+        }
+
+        function updateTimerInfoCards(data) {
+            if (!data || data.length === 0) return;
+
+            // Last shift info (most recent completed shift)
+            const completed = data.filter(item => item.end && item.hours);
+            if (completed.length > 0) {
+                const last = completed[0];
+                const dateStr = last.start.split(' ')[0];
+                const dateParts = dateStr.split('-');
+                const dateObj = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                document.getElementById('last-shift-hrs').innerText = last.hours + ' hrs';
+                document.getElementById('last-shift-date').innerText = `${dayNames[dateObj.getDay()]}, ${dateParts[1]}/${dateParts[2]}`;
+            }
+
+            // Cycle totals
+            const totalHours = data.reduce((sum, item) => sum + (parseFloat(item.hours) || 0), 0).toFixed(1);
+            document.getElementById('cycle-total-hrs').innerText = totalHours + ' hrs';
+            document.getElementById('cycle-shift-count').innerText = data.length + ' shifts';
+        }
+
+        // ============================================================
+        // Edit Modal
+        // ============================================================
         function openEditModal(id, startStr, endStr, note) {
             document.getElementById('edit-id').value = id;
             document.getElementById('edit-note').value = note || '';
 
-            // Parse Start
-            // Format from "YYYY-MM-DD HH:mm:ss"
             const [startDate, startTime] = startStr.split(' ');
             document.getElementById('edit-date').value = startDate;
             document.getElementById('edit-start-time').value = startTime;
 
-            // Parse End (might be empty)
             if (endStr) {
-                // If end exists, it matches the API "YYYY-MM-DD HH:mm:ss"
                 const [endDate, endTime] = endStr.split(' ');
-                // We only care about time now for editing, assuming single date shift mostly
-                // If over night, date logic handles it?
                 document.getElementById('edit-end-time').value = endTime;
             } else {
                 document.getElementById('edit-end-time').value = '';
@@ -1480,25 +958,12 @@
             const data = {
                 id,
                 date,
-                startTime: startTime.length === 5 ? startTime + ":00" : startTime, // Ensure SS
-                endTime: endTime ? (endTime.length === 5 ? endTime + ":00" : endTime) : "", // Ensure SS
-                note: note // Include note
+                startTime: startTime.length === 5 ? startTime + ":00" : startTime,
+                endTime: endTime ? (endTime.length === 5 ? endTime + ":00" : endTime) : "",
+                note: note
             };
 
             showLoading(true);
-
-            // Sending as POST body because it's a JSON object
-            // Apps Script needs to parse postData.contents
-
-            // We need to slightly adjust callApi to support sending body for 'edit' action if not already supported
-            // Our current callApi puts everything in URL? or expects specific structure. 
-            // Let's check callApi.
-
-            // callApi definition: 
-            // if (method === 'POST') options.method = 'POST';
-            // It doesn't set body. We need to update callApi or use a specific implementation here.
-            // Let's modify callApi to accept body data.
-
             callApi('edit', 'POST', JSON.stringify(data))
                 .then(() => {
                     showToast("Shift Updated");
@@ -1512,31 +977,36 @@
                 });
         }
 
-        // --- Add Modal Functions ---
-        function openAddModal() {
-            // Set default date to today
-            const now = new Date();
-            const dateStr = now.toISOString().split('T')[0];
-            document.getElementById('add-date').value = dateStr;
-            document.getElementById('add-start-time').value = '';
-            document.getElementById('add-end-time').value = '';
-            document.getElementById('add-note').value = '';
+        // ============================================================
+        // Manual Entry Tab
+        // ============================================================
+        function updateEntryDuration() {
+            const start = document.getElementById('entry-start-time').value;
+            const end = document.getElementById('entry-end-time').value;
+            const hrsEl = document.getElementById('entry-hrs');
+            const minsEl = document.getElementById('entry-mins');
 
-            document.getElementById('add-modal').classList.remove('hidden');
+            if (!start || !end) { hrsEl.innerText = '00'; minsEl.innerText = '00'; return; }
+
+            const [sh, sm] = start.split(':').map(Number);
+            const [eh, em] = end.split(':').map(Number);
+            let diffMins = (eh * 60 + em) - (sh * 60 + sm);
+            if (diffMins < 0) diffMins += 24 * 60; // overnight
+
+            const hrs = Math.floor(diffMins / 60);
+            const mins = diffMins % 60;
+            hrsEl.innerText = hrs.toString().padStart(2, '0');
+            minsEl.innerText = mins.toString().padStart(2, '0');
         }
 
-        function closeAddModal() {
-            document.getElementById('add-modal').classList.add('hidden');
-        }
-
-        function saveManualShift() {
-            const date = document.getElementById('add-date').value;
-            const startTime = document.getElementById('add-start-time').value;
-            const endTime = document.getElementById('add-end-time').value;
-            const note = document.getElementById('add-note').value;
+        function saveEntryShift() {
+            const date = document.getElementById('entry-date').value;
+            const startTime = document.getElementById('entry-start-time').value;
+            const endTime = document.getElementById('entry-end-time').value;
+            const note = document.getElementById('entry-note').value;
 
             if (!date || !startTime || !endTime) {
-                alert("All fields are required.");
+                showToast("All time fields are required");
                 return;
             }
 
@@ -1548,11 +1018,15 @@
             };
 
             showLoading(true);
-
             callApi('addManual', 'POST', JSON.stringify(data))
                 .then(res => {
                     showToast("Shift Added: " + res.totalHours + " hrs");
-                    closeAddModal();
+                    // Reset form
+                    document.getElementById('entry-start-time').value = '';
+                    document.getElementById('entry-end-time').value = '';
+                    document.getElementById('entry-note').value = '';
+                    document.getElementById('entry-hrs').innerText = '00';
+                    document.getElementById('entry-mins').innerText = '00';
                     refreshData();
                 })
                 .catch(err => {
@@ -1562,7 +1036,174 @@
                 });
         }
 
-        // --- Timer Utilities ---
+        // ============================================================
+        // Settings Tab
+        // ============================================================
+        function loadSettings() {
+            callApi('getConfig')
+                .then(config => {
+                    if (config && config.cycleStartDay) {
+                        const el = document.getElementById('settings-cycle-day');
+                        if (el) el.innerText = config.cycleStartDay.toString().padStart(2, '0');
+                    }
+                })
+                .catch(err => {
+                    console.log("Config load skipped:", err);
+                    // Show default
+                    const el = document.getElementById('settings-cycle-day');
+                    if (el) el.innerText = '09';
+                });
+        }
+
+        function changeCycleDay() {
+            const current = document.getElementById('settings-cycle-day').innerText;
+            const input = prompt(`Enter new salary cycle start day (1-28).\nCurrent: ${current}`, current);
+            if (!input) return;
+
+            const day = parseInt(input, 10);
+            if (isNaN(day) || day < 1 || day > 28) {
+                alert("Please enter a number between 1 and 28.");
+                return;
+            }
+
+            showLoading(true);
+            callApi('updateConfig', 'POST', JSON.stringify({ cycleStartDay: day }))
+                .then(res => {
+                    showToast("Cycle day updated to " + res.cycleStartDay);
+                    document.getElementById('settings-cycle-day').innerText = res.cycleStartDay.toString().padStart(2, '0');
+                    refreshData();
+                })
+                .catch(err => {
+                    console.error("Config update failed:", err);
+                    showError(err);
+                })
+                .finally(() => showLoading(false));
+        }
+
+        function toggleConfigPanel() {
+            const panel = document.getElementById('config-panel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // ============================================================
+        // Export
+        // ============================================================
+        async function exportPDF(range) {
+            let exportData = [];
+            let title = "Shifts Report";
+
+            showLoading(true);
+            try {
+                if (range === 'current') {
+                    exportData = currentMonthDataForExport;
+                    title = `Shifts Report - ${currentMonthLabelForExport}`;
+                } else {
+                    let allData = [];
+                    let offset = 0;
+                    let emptyCount = 0;
+                    while (emptyCount < 2 && offset > -24) {
+                        const res = await callApi('getHistory', 'GET', null, { offset: offset });
+                        let mData = Array.isArray(res) ? res : (res && res.data ? res.data : []);
+                        if (mData.length === 0) { emptyCount++; } else { allData = allData.concat(mData); emptyCount = 0; }
+                        offset--;
+                    }
+                    exportData = allData;
+                    title = "All Shifts History";
+                }
+
+                if (!exportData || exportData.length === 0) {
+                    showToast("No data to export");
+                    return;
+                }
+
+                const totalHours = exportData.reduce((sum, item) => sum + (parseFloat(item.hours) || 0), 0).toFixed(2);
+                const rows = exportData.map(item => {
+                    const dateStr = item.start.split(' ')[0];
+                    const dp = dateStr.split('-');
+                    const shortDate = parseInt(dp[1]) + '/' + parseInt(dp[2]);
+                    const startTimeStr = (item.start.split(' ')[1] || '').slice(0, 5);
+                    const endTimeStr = item.end ? (item.end.split(' ')[1] || '').slice(0, 5) : 'Active';
+                    const hours = item.hours || '0';
+                    const note = item.note || '';
+                    return `<tr><td>${shortDate}</td><td>${startTimeStr}</td><td>${endTimeStr}</td><td style="text-align:right">${hours}</td><td>${note}</td></tr>`;
+                }).join('');
+
+                const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+<style>body{font-family:'Inter',sans-serif;padding:16px;color:#e7e5e4;background:#0e0e0e;margin:0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#1f2020;color:#c6c6c6;padding:8px 10px;text-align:left;text-transform:uppercase;font-size:10px;letter-spacing:0.1em}
+td{padding:7px 10px;border-bottom:1px solid #252626;color:#acabaa}
+tr:nth-child(even) td{background:#131313}
+.total td{font-weight:bold;border-top:2px solid #484848;color:#c6c6c6}
+h1{font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;margin-bottom:4px}
+.subtitle{color:#acabaa;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px}
+@media print{body{padding:0;background:white;color:#111}th{background:#3b82f6;color:white}td{color:#333;border-color:#e2e8f0}tr:nth-child(even) td{background:#f8fafc}.total td{border-color:#cbd5e1;color:#111}h1{color:#111}.subtitle{color:#666}}</style></head>
+<body><h1>${title}</h1><p class="subtitle">DairyShift Report</p>
+<table><thead><tr><th>Date</th><th>Start</th><th>End</th><th>Hours</th><th>Note</th></tr></thead>
+<tbody>${rows}<tr class="total"><td colspan="3" style="text-align:right">Total Hours</td><td style="text-align:right">${totalHours}</td><td></td></tr></tbody></table></body></html>`;
+
+                const win = window.open('', '_blank');
+                win.document.write(html);
+                win.document.close();
+                win.focus();
+                win.print();
+                showToast("Report ready");
+            } catch (err) {
+                console.error("Export failed:", err);
+                showError(err);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================================
+        // Backup & Clear
+        // ============================================================
+        async function backupDatabase() {
+            showLoading(true);
+            try {
+                let allData = [];
+                let offset = 0;
+                let emptyCount = 0;
+                while (emptyCount < 2 && offset > -24) {
+                    const res = await callApi('getHistory', 'GET', null, { offset: offset });
+                    let mData = Array.isArray(res) ? res : (res && res.data ? res.data : []);
+                    if (mData.length === 0) { emptyCount++; } else { allData = allData.concat(mData); emptyCount = 0; }
+                    offset--;
+                }
+
+                const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dairyshift-backup-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast("Backup downloaded");
+            } catch (err) {
+                console.error("Backup failed:", err);
+                showError(err);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function clearLocalHistory() {
+            if (!confirm("Clear all local cached data? This does NOT delete data from Google Sheets.")) return;
+            localStorage.removeItem('dairyshift_state');
+            localStorage.removeItem('dairyshift_queue');
+            queue = [];
+            showToast("Local cache cleared");
+            refreshData();
+        }
+
+        // ============================================================
+        // Timer Utilities
+        // ============================================================
         function startTimer() {
             stopTimer();
             if (!shiftStartTime) return;
@@ -1573,16 +1214,11 @@
         function updateTimerDisplay() {
             const now = new Date();
             const diff = now - shiftStartTime;
-
-            if (diff < 0) {
-                document.getElementById('timer').innerText = "00:00:00";
-                return;
-            }
+            if (diff < 0) { document.getElementById('timer').innerText = "00:00:00"; return; }
 
             const hrs = Math.floor(diff / 3600000);
             const mins = Math.floor((diff % 3600000) / 60000);
             const secs = Math.floor((diff % 60000) / 1000);
-
             const pad = (n) => n.toString().padStart(2, '0');
             document.getElementById('timer').innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
         }
@@ -1591,6 +1227,9 @@
             if (timerInterval) clearInterval(timerInterval);
         }
 
+        // ============================================================
+        // UI Helpers
+        // ============================================================
         function showLoading(show) {
             const el = document.getElementById('loading');
             if (show) el.classList.remove('hidden');
@@ -1604,62 +1243,59 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        function deleteItem(id, dateStr) {
-            if (!confirm(`Are you sure you want to delete the shift from ${dateStr}?`)) return;
-
-            // Optimistic removal from UI (optional, but good UX)
-            // But since we rely on refreshData() to re-render, we can just show loading
-            showLoading(true);
-
-            callApi('delete&id=' + id, 'POST')
-                .then(() => {
-                    showToast("Shift Deleted");
-                    refreshData();
-                })
-                .catch(err => {
-                    console.error("Delete failed:", err);
-                    showError(err);
-                    showLoading(false);
-                });
-        }
-
         function showError(err) {
-            alert("Error: " + err.message);
+            showToast("Error: " + err.message);
         }
 
-        // --- UI Helpers ---
+        function deleteItem(id, dateStr) {
+            if (!confirm(`Delete shift from ${dateStr}?`)) return;
+            showLoading(true);
+            callApi('delete&id=' + id, 'POST')
+                .then(() => { showToast("Shift Deleted"); refreshData(); })
+                .catch(err => { console.error("Delete failed:", err); showError(err); showLoading(false); });
+        }
+
+        // ============================================================
+        // Navigation
+        // ============================================================
         function switchTab(tabId) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            // Show target tab
             document.getElementById('tab-' + tabId).classList.add('active');
 
             // Update Nav
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            // Simple check: index 0 is timer, 1 is history. Better to use IDs or loop logic.
-            const navIndex = tabId === 'timer' ? 0 : 1;
-            document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(el => {
+                el.classList.remove('bg-primary', 'text-on-primary', 'rounded-sm');
+                el.classList.add('text-on-surface-variant');
+                const icon = el.querySelector('.material-symbols-outlined');
+                if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+            });
+
+            const tabMap = { timer: 0, history: 1, entry: 2, settings: 3 };
+            const activeNav = navItems[tabMap[tabId]];
+            if (activeNav) {
+                activeNav.classList.add('bg-primary', 'text-on-primary', 'rounded-sm');
+                activeNav.classList.remove('text-on-surface-variant');
+                const activeIcon = activeNav.querySelector('.material-symbols-outlined');
+                if (activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
+            }
 
             localStorage.setItem('dairyshift_tab', tabId);
+
+            // Auto-set date for entry tab
+            if (tabId === 'entry') {
+                const dateInput = document.getElementById('entry-date');
+                if (dateInput && !dateInput.value) {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+            }
         }
 
         function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-            const newTheme = current === 'light' ? 'dark' : 'light';
-            applyTheme(newTheme);
-        }
-
-        function applyTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('dairyshift_theme', theme);
-            const btn = document.getElementById('theme-toggle');
-            if (theme === 'dark') {
-                btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
-            } else {
-                btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-            }
+            // Dark mode only — show info
+            showToast("Dark mode only");
         }
     </script>
 </body>
-
 </html>
